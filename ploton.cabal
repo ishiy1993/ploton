@@ -15,8 +15,11 @@ cabal-version:       >=1.10
 
 library
   hs-source-dirs:      src
-  exposed-modules:     Lib
+  exposed-modules:     Config
+                     , Utils
   build-depends:       base >= 4.7 && < 5
+                     , optparse-applicative
+                     , process
   default-language:    Haskell2010
 
 executable ploton
@@ -25,8 +28,6 @@ executable ploton
   ghc-options:         -threaded -rtsopts -with-rtsopts=-N
   build-depends:       base
                      , ploton
-                     , optparse-applicative
-                     , process
   default-language:    Haskell2010
 
 test-suite ploton-test

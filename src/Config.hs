@@ -53,15 +53,20 @@ optsParser = info (helper <*> programOptions)
                    <*> switch (help "logy")
 
 toCode :: Config -> String
-toCode cfg = intercalate ";" $ [ "set term " ++ format cfg
-                               , "set output " ++ show (output cfg)]
-                             ++ maybeToCode "xlabel" (xlabel cfg)
-                             ++ maybeToCode "ylabel" (ylabel cfg)
-                             ++ maybeToCode "xrange" (xrange cfg)
-                             ++ maybeToCode "yrange" (yrange cfg)
-                             ++ if logx cfg then ["set logscale x"] else []
-                             ++ if logy cfg then ["set logscale y"] else []
-                             ++ ["plot " ++ ploting]
-    where maybeToCode attr = maybe [] (\s->[unwords ["set", attr, show s]])
+toCode cfg = intercalate ";" codes
+    where maybeToCode attr = maybe [] (\s->[unwords ["set", attr, s]])
+          range s | null s || head s == '[' && last s == ']' = s
+                  | otherwise = "["++s++"]"
           ploting = snd $ foldl' build (1, script cfg) $ dataFiles cfg
               where build (i, scr) file = (i+1, replace i (show file) scr)
+          codes = 
+            [ "set term " ++ format cfg
+            , "set output " ++ show (output cfg)]
+            ++ maybeToCode "xlabel" (show <$> xlabel cfg)
+            ++ maybeToCode "ylabel" (show <$> ylabel cfg)
+            ++ maybeToCode "xrange" (range <$> xrange cfg)
+            ++ maybeToCode "yrange" (range <$> yrange cfg)
+            ++ maybeToCode "title" (show <$> title cfg)
+            ++ ["set logscale x" | logx cfg]
+            ++ ["set logscale y" | logy cfg]
+            ++ ["plot " ++ ploting]

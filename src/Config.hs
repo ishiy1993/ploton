@@ -49,8 +49,8 @@ optsParser = info (helper <*> programOptions)
                    <*> maybeStrOption "xrange" "xr"
                    <*> maybeStrOption "yrange" "yr"
                    <*> maybeStrOption "title" "title"
-                   <*> switch (help "logx")
-                   <*> switch (help "logy")
+                   <*> switch (long "logx" <> help "logx")
+                   <*> switch (long "logy" <> help "logy")
 
 toCode :: Config -> String
 toCode cfg = intercalate ";" codes

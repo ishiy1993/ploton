@@ -26,6 +26,8 @@ spec = do
                              , ylabel = Nothing
                              , xrange = Nothing
                              , yrange = Nothing
+                             , xformat = Nothing
+                             , yformat = Nothing
                              , title = Nothing
                              , logx = False
                              , logy = False
@@ -43,6 +45,8 @@ spec = do
                              , ylabel = Just "x^2"
                              , xrange = Just "[1:10]"
                              , yrange = Just "10:100"
+                             , xformat = Just "%E"
+                             , yformat = Just "%.1E"
                              , title = Just "sample"
                              , logx = True
                              , logy = True
@@ -53,6 +57,8 @@ spec = do
                              ,"set ylabel \"x^2\";"
                              ,"set xrange [1:10];"
                              ,"set yrange [10:100];"
+                             ,"set format x \"%E\";"
+                             ,"set format y \"%.1E\";"
                              ,"set title \"sample\";"
                              ,"set logscale x;"
                              ,"set logscale y;"

@@ -15,6 +15,8 @@ data Config = Config
     , ylabel    :: !(Maybe String)
     , xrange    :: !(Maybe String)
     , yrange    :: !(Maybe String)
+    , xformat   :: !(Maybe String)
+    , yformat   :: !(Maybe String)
     , title     :: !(Maybe String)
     , logx      :: !Bool
     , logy      :: !Bool
@@ -48,6 +50,8 @@ optsParser = info (helper <*> programOptions)
                    <*> maybeStrOption "ylabel" "yl"
                    <*> maybeStrOption "xrange" "xr"
                    <*> maybeStrOption "yrange" "yr"
+                   <*> maybeStrOption "xformat" "xf"
+                   <*> maybeStrOption "yformat" "yf"
                    <*> maybeStrOption "title" "title"
                    <*> switch (long "logx" <> help "logx")
                    <*> switch (long "logy" <> help "logy")
@@ -66,6 +70,8 @@ toCode cfg = intercalate ";" codes
             ++ maybeToCode "ylabel" (show <$> ylabel cfg)
             ++ maybeToCode "xrange" (range <$> xrange cfg)
             ++ maybeToCode "yrange" (range <$> yrange cfg)
+            ++ maybeToCode "format x" (show <$> xformat cfg)
+            ++ maybeToCode "format y" (show <$> yformat cfg)
             ++ maybeToCode "title" (show <$> title cfg)
             ++ ["set logscale x" | logx cfg]
             ++ ["set logscale y" | logy cfg]

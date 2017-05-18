@@ -10,15 +10,15 @@ main = hspec spec
 
 spec :: Spec
 spec = do
-    describe "replace \"$1 is $2\"" $ do
+    describe "replace \"#1 is #2\"" $ do
         it "replace only $1" $
-            replace 1 "Haskell" "$1 is $2" `shouldBe` "Haskell is $2"
+            replace 1 "Haskell" "#1 is #2" `shouldBe` "Haskell is #2"
         it "replace both $1 and $2" $
-            replace 1 "Haskell" (replace 2 "greate" "$1 is $2")
+            replace 1 "Haskell" (replace 2 "greate" "#1 is #2")
                 `shouldBe` "Haskell is greate"
     describe "toCode" $ do
         it "simple version" $ do
-            let cfg = Config { script = "$1 u 1:2"
+            let cfg = Config { script = "#1 u 1:2"
                              , dataFiles = ["sample.dat"]
                              , term = "pdf"
                              , output = "plot_result.pdf"
@@ -37,7 +37,7 @@ spec = do
                              ,"plot \"sample.dat\" u 1:2"]
             toCode cfg `shouldBe` res
         it "full version" $ do
-            let cfg = Config { script = "$1 u 1:2, $1 u 1:4, $2 u 1:2"
+            let cfg = Config { script = "#1 u 1:2, #1 u 1:4, #2 u 1:2"
                              , dataFiles = ["sample1.dat", "sample2.dat"]
                              , term = "pdf"
                              , output = "plot_result.pdf"

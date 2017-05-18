@@ -7,9 +7,9 @@ import System.Process (callCommand)
 
 replace :: Int -> String -> String -> String
 replace i str "" = ""
-replace i str ('$':c:res)
+replace i str ('#':c:res)
     | c == intToDigit i = str ++ replace i str res
-    | otherwise = ['$',c] ++ replace i str res
+    | otherwise = ['#',c] ++ replace i str res
 replace i str (s:ss) = s:replace i str ss
 
 plot :: String -> IO ()

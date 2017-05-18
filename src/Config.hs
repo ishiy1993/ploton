@@ -9,7 +9,7 @@ import Utils
 data Config = Config
     { script    :: !String
     , dataFiles :: ![String]
-    , format    :: !String
+    , term    :: !String
     , output    :: !String
     , xlabel    :: !(Maybe String)
     , ylabel    :: !(Maybe String)
@@ -37,7 +37,7 @@ optsParser = info (helper <*> programOptions)
                    <*> some (strArgument $ metavar "FILES"
                                          <> help "data ifles")
                    <*> strOption (metavar "FORMAT"
-                                 <> long "fmt"
+                                 <> long "term"
                                  <> value "pdf"
                                  <> help "output format"
                                  )
@@ -64,7 +64,7 @@ toCode cfg = intercalate ";" codes
           ploting = snd $ foldl' build (1, script cfg) $ dataFiles cfg
               where build (i, scr) file = (i+1, replace i (show file) scr)
           codes = 
-            [ "set term " ++ format cfg
+            [ "set term " ++ term cfg
             , "set output " ++ show (output cfg)]
             ++ maybeToCode "xlabel" (show <$> xlabel cfg)
             ++ maybeToCode "ylabel" (show <$> ylabel cfg)

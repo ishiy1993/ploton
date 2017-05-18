@@ -20,7 +20,7 @@ spec = do
         it "simple version" $ do
             let cfg = Config { script = "$1 u 1:2"
                              , dataFiles = ["sample.dat"]
-                             , format = "pdf"
+                             , term = "pdf"
                              , output = "plot_result.pdf"
                              , xlabel = Nothing
                              , ylabel = Nothing
@@ -39,7 +39,7 @@ spec = do
         it "full version" $ do
             let cfg = Config { script = "$1 u 1:2, $1 u 1:4, $2 u 1:2"
                              , dataFiles = ["sample1.dat", "sample2.dat"]
-                             , format = "pdf"
+                             , term = "pdf"
                              , output = "plot_result.pdf"
                              , xlabel = Just "x"
                              , ylabel = Just "x^2"

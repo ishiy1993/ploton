@@ -16,7 +16,7 @@ $ stack install
 ## Usage
 
 ```
-$ ploton --xl "x" --yl "x^2" '$1 u 1:2 with linespoints' "sample.dat"
+$ ploton --xl "x" --yl "x^2" '#1 u 1:2 with linespoints' "sample.dat"
 plot_result.pdf
 ```
 

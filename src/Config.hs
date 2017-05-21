@@ -18,6 +18,7 @@ data Config = Config
     , xformat   :: !(Maybe String)
     , yformat   :: !(Maybe String)
     , title     :: !(Maybe String)
+    , style     :: !String
     , logx      :: !Bool
     , logy      :: !Bool
     } deriving Show
@@ -53,6 +54,11 @@ optsParser = info (helper <*> programOptions)
                    <*> maybeStrOption "xformat" "xf"
                    <*> maybeStrOption "yformat" "yf"
                    <*> maybeStrOption "title" "title"
+                   <*> strOption (metavar "style"
+                                 <> long "style"
+                                 <> value "linespoints"
+                                 <> help "data style"
+                                 )
                    <*> switch (long "logx" <> help "logx")
                    <*> switch (long "logy" <> help "logy")
 
@@ -73,6 +79,7 @@ toCode cfg = intercalate ";" codes
             ++ maybeToCode "format x" (show <$> xformat cfg)
             ++ maybeToCode "format y" (show <$> yformat cfg)
             ++ maybeToCode "title" (show <$> title cfg)
+            ++ ["set style data " ++ style cfg]
             ++ ["set logscale x" | logx cfg]
             ++ ["set logscale y" | logy cfg]
             ++ ["plot " ++ ploting]

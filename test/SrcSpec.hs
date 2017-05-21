@@ -29,11 +29,13 @@ spec = do
                              , xformat = Nothing
                              , yformat = Nothing
                              , title = Nothing
+                             , style = "linespoints"
                              , logx = False
                              , logy = False
                              }
                 res = concat ["set term pdf;"
                              ,"set output \"plot_result.pdf\";"
+                             ,"set style data linespoints;"
                              ,"plot \"sample.dat\" u 1:2"]
             toCode cfg `shouldBe` res
         it "full version" $ do
@@ -48,6 +50,7 @@ spec = do
                              , xformat = Just "%E"
                              , yformat = Just "%.1E"
                              , title = Just "sample"
+                             , style = "linespoints"
                              , logx = True
                              , logy = True
                              }
@@ -60,6 +63,7 @@ spec = do
                              ,"set format x \"%E\";"
                              ,"set format y \"%.1E\";"
                              ,"set title \"sample\";"
+                             ,"set style data linespoints;"
                              ,"set logscale x;"
                              ,"set logscale y;"
                              ,"plot \"sample1.dat\" u 1:2, \"sample1.dat\" u 1:4, \"sample2.dat\" u 1:2"]

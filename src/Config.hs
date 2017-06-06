@@ -2,9 +2,12 @@ module Config where
 
 import Data.Monoid ((<>))
 import Data.List (intercalate, foldl')
+import Data.Version (showVersion)
 import Options.Applicative
 
 import Utils
+
+import Paths_ploton (version)
 
 data Config = Config
     { script    :: !String
@@ -27,9 +30,11 @@ getConfig :: IO Config
 getConfig = execParser optsParser
 
 optsParser :: ParserInfo Config
-optsParser = info (helper <*> programOptions)
+optsParser = info (versionInfo <*> helper <*> programOptions)
                   (fullDesc <> header "ploton")
     where
+        versionInfo = abortOption (InfoMsg (showVersion version)) $
+            long "version" <> help "Show version" <> hidden
         maybeStrOption mv lg =
             (\s -> if null s then Nothing else Just s) <$>
                 strOption (metavar mv <> long lg <> value "" <> help mv)

@@ -17,6 +17,7 @@ library
   hs-source-dirs:      src
   exposed-modules:     Config
                      , Utils
+  other-modules:       Paths_ploton
   build-depends:       base >= 4.7 && < 5
                      , optparse-applicative
                      , process

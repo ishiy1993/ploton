@@ -7,10 +7,10 @@ This tool needs
 - gnuplot
 
 ## Install
-Clone this repo and
 
 ```
-$ stack install
+$ stack update
+$ stack install ploton
 ```
 
 ## Usage

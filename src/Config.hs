@@ -24,6 +24,7 @@ data Config = Config
     , style     :: !String
     , logx      :: !Bool
     , logy      :: !Bool
+    , splot     :: !Bool
     } deriving Show
 
 getConfig :: IO Config
@@ -66,6 +67,7 @@ optsParser = info (versionInfo <*> helper <*> programOptions)
                                  )
                    <*> switch (long "logx" <> help "logx")
                    <*> switch (long "logy" <> help "logy")
+                   <*> switch (short '3' <> long "splot" <> help "Use splot")
 
 toCode :: Config -> String
 toCode cfg = intercalate ";" codes
@@ -87,4 +89,6 @@ toCode cfg = intercalate ";" codes
             ++ ["set style data " ++ style cfg]
             ++ ["set logscale x" | logx cfg]
             ++ ["set logscale y" | logy cfg]
-            ++ ["plot " ++ ploting]
+            ++ ["set pm3d map" | splot cfg]
+            ++ ["splot " ++ ploting | splot cfg]
+            ++ ["plot " ++ ploting | not (splot cfg)]

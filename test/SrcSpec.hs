@@ -32,6 +32,7 @@ spec = do
                              , style = "linespoints"
                              , logx = False
                              , logy = False
+                             , splot = False
                              }
                 res = concat ["set term pdf;"
                              ,"set output \"plot_result.pdf\";"
@@ -53,6 +54,7 @@ spec = do
                              , style = "linespoints"
                              , logx = True
                              , logy = True
+                             , splot = False
                              }
                 res = concat ["set term pdf;"
                              ,"set output \"plot_result.pdf\";"
@@ -67,4 +69,27 @@ spec = do
                              ,"set logscale x;"
                              ,"set logscale y;"
                              ,"plot \"sample1.dat\" u 1:2, \"sample1.dat\" u 1:4, \"sample2.dat\" u 1:2"]
+            toCode cfg `shouldBe` res
+        it "3d simple version" $ do
+            let cfg = Config { script = "#1 with pm3d"
+                             , dataFiles = ["sample.dat"]
+                             , term = "pdf"
+                             , output = "plot_result.pdf"
+                             , xlabel = Nothing
+                             , ylabel = Nothing
+                             , xrange = Nothing
+                             , yrange = Nothing
+                             , xformat = Nothing
+                             , yformat = Nothing
+                             , title = Nothing
+                             , style = "linespoints"
+                             , logx = False
+                             , logy = False
+                             , splot = True
+                             }
+                res = concat ["set term pdf;"
+                             ,"set output \"plot_result.pdf\";"
+                             ,"set style data linespoints;"
+                             ,"set pm3d map;"
+                             ,"splot \"sample.dat\" with pm3d"]
             toCode cfg `shouldBe` res

@@ -14,6 +14,7 @@ data Config = Config
     , dataFiles :: ![String]
     , term    :: !String
     , output    :: !String
+    , set       :: ![String]
     , xlabel    :: !(Maybe String)
     , ylabel    :: !(Maybe String)
     , xrange    :: !(Maybe String)
@@ -53,6 +54,10 @@ optsParser = info (versionInfo <*> helper <*> programOptions)
                                  <> value "plot_result.pdf"
                                  <> help "output file name"
                                  )
+                   <*> many (strOption (metavar "set ..."
+                                       <> long "set"
+                                       <> help "set options"
+                                       ))
                    <*> maybeStrOption "xlabel" "xl"
                    <*> maybeStrOption "ylabel" "yl"
                    <*> maybeStrOption "xrange" "xr"
@@ -90,5 +95,6 @@ toCode cfg = intercalate ";" codes
             ++ ["set logscale x" | logx cfg]
             ++ ["set logscale y" | logy cfg]
             ++ ["set pm3d map" | splot cfg]
+            ++ ["set " ++ opt | opt <- set cfg]
             ++ ["splot " ++ ploting | splot cfg]
             ++ ["plot " ++ ploting | not (splot cfg)]

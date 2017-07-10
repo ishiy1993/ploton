@@ -31,6 +31,7 @@ spec = do
                              , yformat = Nothing
                              , title = Nothing
                              , style = "linespoints"
+                             , color = ""
                              , logx = False
                              , logy = False
                              , splot = False
@@ -54,6 +55,7 @@ spec = do
                              , yformat = Just "%.1E"
                              , title = Just "sample"
                              , style = "linespoints"
+                             , color = ""
                              , logx = True
                              , logy = True
                              , splot = False
@@ -86,6 +88,7 @@ spec = do
                              , yformat = Nothing
                              , title = Nothing
                              , style = "linespoints"
+                             , color = ""
                              , logx = False
                              , logy = False
                              , splot = True
@@ -94,5 +97,6 @@ spec = do
                              ,"set output \"plot_result.pdf\";"
                              ,"set style data linespoints;"
                              ,"set pm3d map;"
+                             ,"set palette ;"
                              ,"splot \"sample.dat\" with pm3d"]
             toCode cfg `shouldBe` res

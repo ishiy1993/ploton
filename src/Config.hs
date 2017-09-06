@@ -27,6 +27,7 @@ data Config = Config
     , logx      :: !Bool
     , logy      :: !Bool
     , splot     :: !Bool
+    , verbose   :: !Bool
     } deriving Show
 
 getConfig :: IO Config
@@ -79,6 +80,7 @@ optsParser = info (versionInfo <*> helper <*> programOptions)
                    <*> switch (long "logx" <> help "logx")
                    <*> switch (long "logy" <> help "logy")
                    <*> switch (short '3' <> long "splot" <> help "Use splot")
+                   <*> switch (long "verbose" <> help "output gnuplot script")
 
 toCode :: Config -> String
 toCode cfg = intercalate ";" codes

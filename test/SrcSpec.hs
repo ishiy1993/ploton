@@ -35,6 +35,7 @@ spec = do
                              , logx = False
                              , logy = False
                              , splot = False
+                             , verbose = False
                              }
                 res = concat ["set term pdf;"
                              ,"set output \"plot_result.pdf\";"
@@ -59,6 +60,7 @@ spec = do
                              , logx = True
                              , logy = True
                              , splot = False
+                             , verbose = False
                              }
                 res = concat ["set term pdf;"
                              ,"set output \"plot_result.pdf\";"
@@ -92,6 +94,7 @@ spec = do
                              , logx = False
                              , logy = False
                              , splot = True
+                             , verbose = False
                              }
                 res = concat ["set term pdf;"
                              ,"set output \"plot_result.pdf\";"

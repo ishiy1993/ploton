@@ -3,6 +3,7 @@ module SrcSpec (main, spec) where
 import Test.Hspec
 
 import Config
+import Generator (genCode)
 import Utils
 
 main :: IO ()
@@ -16,13 +17,13 @@ spec = do
         it "replace both $1 and $2" $
             replace 1 "Haskell" (replace 2 "greate" "#1 is #2")
                 `shouldBe` "Haskell is greate"
-    describe "toCode" $ do
+    describe "genCode" $ do
         it "simple version" $ do
             let cfg = Config { script = "#1 u 1:2"
                              , dataFiles = ["sample.dat"]
                              , term = "pdf"
                              , output = "plot_result.pdf"
-                             , set = []
+                             , setting = []
                              , xlabel = Nothing
                              , ylabel = Nothing
                              , xrange = Nothing
@@ -30,6 +31,7 @@ spec = do
                              , xformat = Nothing
                              , yformat = Nothing
                              , title = Nothing
+                             , multi = Nothing
                              , style = "linespoints"
                              , color = ""
                              , logx = False
@@ -40,14 +42,14 @@ spec = do
                 res = concat ["set term pdf;"
                              ,"set output \"plot_result.pdf\";"
                              ,"set style data linespoints;"
-                             ,"plot \"sample.dat\" u 1:2"]
-            toCode cfg `shouldBe` res
+                             ,"plot \"sample.dat\" u 1:2;"]
+            genCode cfg `shouldBe` res
         it "full version" $ do
             let cfg = Config { script = "#1 u 1:2, #1 u 1:4, #2 u 1:2"
                              , dataFiles = ["sample1.dat", "sample2.dat"]
                              , term = "pdf"
                              , output = "plot_result.pdf"
-                             , set = []
+                             , setting = []
                              , xlabel = Just "x"
                              , ylabel = Just "x^2"
                              , xrange = Just "[1:10]"
@@ -55,6 +57,7 @@ spec = do
                              , xformat = Just "%E"
                              , yformat = Just "%.1E"
                              , title = Just "sample"
+                             , multi = Nothing
                              , style = "linespoints"
                              , color = ""
                              , logx = True
@@ -70,18 +73,18 @@ spec = do
                              ,"set yrange [10:100];"
                              ,"set format x \"%E\";"
                              ,"set format y \"%.1E\";"
-                             ,"set title \"sample\";"
                              ,"set style data linespoints;"
                              ,"set logscale x;"
                              ,"set logscale y;"
-                             ,"plot \"sample1.dat\" u 1:2, \"sample1.dat\" u 1:4, \"sample2.dat\" u 1:2"]
-            toCode cfg `shouldBe` res
+                             ,"set title \"sample\";"
+                             ,"plot \"sample1.dat\" u 1:2, \"sample1.dat\" u 1:4, \"sample2.dat\" u 1:2;"]
+            genCode cfg `shouldBe` res
         it "3d simple version" $ do
             let cfg = Config { script = "#1 with pm3d"
                              , dataFiles = ["sample.dat"]
                              , term = "pdf"
                              , output = "plot_result.pdf"
-                             , set = []
+                             , setting = []
                              , xlabel = Nothing
                              , ylabel = Nothing
                              , xrange = Nothing
@@ -89,6 +92,7 @@ spec = do
                              , xformat = Nothing
                              , yformat = Nothing
                              , title = Nothing
+                             , multi = Nothing
                              , style = "linespoints"
                              , color = ""
                              , logx = False
@@ -101,5 +105,77 @@ spec = do
                              ,"set style data linespoints;"
                              ,"set pm3d map;"
                              ,"set palette ;"
-                             ,"splot \"sample.dat\" with pm3d"]
-            toCode cfg `shouldBe` res
+                             ,"splot \"sample.dat\" with pm3d;"]
+            genCode cfg `shouldBe` res
+        it "multi 2d version" $ do
+            let cfg = Config { script = "#1 u 1:2;#1 u 1:3"
+                             , dataFiles = ["sample.dat"]
+                             , term = "pdf"
+                             , output = "plot_result.pdf"
+                             , setting = []
+                             , xlabel = Nothing
+                             , ylabel = Nothing
+                             , xrange = Nothing
+                             , yrange = Nothing
+                             , xformat = Nothing
+                             , yformat = Nothing
+                             , title = Nothing
+                             , multi = Just "1,2"
+                             , style = "linespoints"
+                             , color = ""
+                             , logx = False
+                             , logy = False
+                             , splot = False
+                             , verbose = False
+                             }
+                res = concat ["set term pdf size 8in,3in;"
+                             ,"set output \"plot_result.pdf\";"
+                             ,"set tmargin 3;"
+                             ,"set bmargin 3;"
+                             ,"set lmargin 5;"
+                             ,"set rmargin 2;"
+                             ,"set style data linespoints;"
+                             ,"set multiplot layout 1,2;"
+                             ,"plot \"sample.dat\" u 1:2;"
+                             ,"plot \"sample.dat\" u 1:3;"
+                             ]
+            genCode cfg `shouldBe` res
+        it "multi 3d version" $ do
+            let cfg = Config { script = "#1 u 1:2:3;#1 u 1:2:4;#2 u 1:2:3"
+                             , dataFiles = ["sample1.dat", "sample2.dat"]
+                             , term = "pdf"
+                             , output = "plot_result.pdf"
+                             , setting = []
+                             , xlabel = Nothing
+                             , ylabel = Nothing
+                             , xrange = Nothing
+                             , yrange = Nothing
+                             , xformat = Nothing
+                             , yformat = Nothing
+                             , title = Just "r;u;v"
+                             , multi = Just "1,3"
+                             , style = "linespoints"
+                             , color = ""
+                             , logx = False
+                             , logy = False
+                             , splot = True
+                             , verbose = False
+                             }
+                res = concat ["set term pdf size 12in,3in;"
+                             ,"set output \"plot_result.pdf\";"
+                             ,"set tmargin 3;"
+                             ,"set bmargin 3;"
+                             ,"set lmargin 5;"
+                             ,"set rmargin 2;"
+                             ,"set style data linespoints;"
+                             ,"set pm3d map;"
+                             ,"set palette ;"
+                             ,"set multiplot layout 1,3;"
+                             ,"set title \"r\";"
+                             ,"splot \"sample1.dat\" u 1:2:3;"
+                             ,"set title \"u\";"
+                             ,"splot \"sample1.dat\" u 1:2:4;"
+                             ,"set title \"v\";"
+                             ,"splot \"sample2.dat\" u 1:2:3;"
+                             ]
+            genCode cfg `shouldBe` res

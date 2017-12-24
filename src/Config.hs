@@ -12,9 +12,9 @@ import Paths_ploton (version)
 data Config = Config
     { script    :: !String
     , dataFiles :: ![String]
-    , term    :: !String
+    , term      :: !String
     , output    :: !String
-    , set       :: ![String]
+    , setting   :: ![String]
     , xlabel    :: !(Maybe String)
     , ylabel    :: !(Maybe String)
     , xrange    :: !(Maybe String)
@@ -22,6 +22,7 @@ data Config = Config
     , xformat   :: !(Maybe String)
     , yformat   :: !(Maybe String)
     , title     :: !(Maybe String)
+    , multi     :: !(Maybe String)
     , style     :: !String
     , color     :: !String
     , logx      :: !Bool
@@ -67,6 +68,7 @@ optsParser = info (versionInfo <*> helper <*> programOptions)
                    <*> maybeStrOption "xformat" "xf"
                    <*> maybeStrOption "yformat" "yf"
                    <*> maybeStrOption "title" "title"
+                   <*> maybeStrOption "multi" "multi"
                    <*> strOption (metavar "style"
                                  <> long "style"
                                  <> value "linespoints"
@@ -81,35 +83,3 @@ optsParser = info (versionInfo <*> helper <*> programOptions)
                    <*> switch (long "logy" <> help "logy")
                    <*> switch (short '3' <> long "splot" <> help "Use splot")
                    <*> switch (long "verbose" <> help "output gnuplot script")
-
-toCode :: Config -> String
-toCode cfg = intercalate ";" codes
-    where maybeToCode attr = maybe [] (\s->[unwords ["set", attr, s]])
-          colorToCode "jet" =
-              "define (0\"#000090\",1\"#000fff\",2\"#0090ff\",3\"#0fffee\",4\"#90ff70\",5\"#ffee00\",6\"#ff7000\",7\"#ee0000\",8\"#7f0000\")"
-          colorToCode "light" =
-              "define (1\"#0000ff\",2\"#0080ff\",3\"#00ffff\",4\"#00ff80\",5\"#00ff00\",6\"#80ff00\",7\"#ffff00\",8\"#ff8000\",9\"#ff0000\")"
-          colorToCode "nizi" = "rgb 33,13,10"
-          colorToCode _ = ""
-          range s | null s || head s == '[' && last s == ']' = s
-                  | otherwise = "["++s++"]"
-          ploting = snd $ foldl' build (1, script cfg) $ dataFiles cfg
-              where build (i, scr) file = (i+1, replace i (show file) scr)
-          codes = 
-            [ "set term " ++ term cfg
-            , "set output " ++ show (output cfg)]
-            ++ maybeToCode "xlabel" (show <$> xlabel cfg)
-            ++ maybeToCode "ylabel" (show <$> ylabel cfg)
-            ++ maybeToCode "xrange" (range <$> xrange cfg)
-            ++ maybeToCode "yrange" (range <$> yrange cfg)
-            ++ maybeToCode "format x" (show <$> xformat cfg)
-            ++ maybeToCode "format y" (show <$> yformat cfg)
-            ++ maybeToCode "title" (show <$> title cfg)
-            ++ ["set style data " ++ style cfg]
-            ++ ["set logscale x" | logx cfg]
-            ++ ["set logscale y" | logy cfg]
-            ++ ["set pm3d map" | splot cfg]
-            ++ ["set palette " ++ colorToCode (color cfg) | splot cfg]
-            ++ ["set " ++ opt | opt <- set cfg]
-            ++ ["splot " ++ ploting | splot cfg]
-            ++ ["plot " ++ ploting | not (splot cfg)]

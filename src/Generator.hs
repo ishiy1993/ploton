@@ -34,7 +34,8 @@ genCode cfg = execWriter $ do
     set "pm3d map"
     set $ "palette " ++ colorToCode (color cfg)
   mapM_ set $ setting cfg
-  setMaybe "multiplot layout" (multi cfg)
+  let withTitle = maybe id (\t -> (++ (" title " ++ show t))) (multiTitle cfg)
+  setMaybe "multiplot layout" (withTitle <$> multi cfg)
   let body = makeScripts (splot cfg) (script cfg) (dataFiles cfg)
   case splitOn ";" <$> title cfg of
     Nothing -> mapM_ tell' body

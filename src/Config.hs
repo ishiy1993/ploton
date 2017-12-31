@@ -23,6 +23,7 @@ data Config = Config
     , yformat   :: !(Maybe String)
     , title     :: !(Maybe String)
     , multi     :: !(Maybe String)
+    , multiTitle :: !(Maybe String)
     , style     :: !String
     , color     :: !String
     , logx      :: !Bool
@@ -69,6 +70,7 @@ optsParser = info (versionInfo <*> helper <*> programOptions)
                    <*> maybeStrOption "yformat" "yf"
                    <*> maybeStrOption "title" "title"
                    <*> maybeStrOption "multi" "multi"
+                   <*> maybeStrOption "multi title" "multi-title"
                    <*> strOption (metavar "style"
                                  <> long "style"
                                  <> value "linespoints"

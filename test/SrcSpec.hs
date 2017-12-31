@@ -32,6 +32,7 @@ spec = do
                              , yformat = Nothing
                              , title = Nothing
                              , multi = Nothing
+                             , multiTitle = Nothing
                              , style = "linespoints"
                              , color = ""
                              , logx = False
@@ -58,6 +59,7 @@ spec = do
                              , yformat = Just "%.1E"
                              , title = Just "sample"
                              , multi = Nothing
+                             , multiTitle = Nothing
                              , style = "linespoints"
                              , color = ""
                              , logx = True
@@ -93,6 +95,7 @@ spec = do
                              , yformat = Nothing
                              , title = Nothing
                              , multi = Nothing
+                             , multiTitle = Nothing
                              , style = "linespoints"
                              , color = ""
                              , logx = False
@@ -121,6 +124,7 @@ spec = do
                              , yformat = Nothing
                              , title = Nothing
                              , multi = Just "1,2"
+                             , multiTitle = Nothing
                              , style = "linespoints"
                              , color = ""
                              , logx = False
@@ -154,6 +158,7 @@ spec = do
                              , yformat = Nothing
                              , title = Just "r;u;v"
                              , multi = Just "1,3"
+                             , multiTitle = Just "sample"
                              , style = "linespoints"
                              , color = ""
                              , logx = False
@@ -170,7 +175,7 @@ spec = do
                              ,"set style data linespoints;"
                              ,"set pm3d map;"
                              ,"set palette ;"
-                             ,"set multiplot layout 1,3;"
+                             ,"set multiplot layout 1,3 title \"sample\";"
                              ,"set title \"r\";"
                              ,"splot \"sample1.dat\" u 1:2:3;"
                              ,"set title \"u\";"

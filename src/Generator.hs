@@ -15,12 +15,12 @@ genCode cfg = execWriter $ do
   case calcSize <$> multi cfg of
     Nothing -> set $ "term " ++ term cfg
     Just s -> set $ "term " ++ term cfg ++ " size " ++ s
-  set $ "output " ++ show (output cfg)
-  when (isJust $ multi cfg) $ do
-    set "tmargin 3"
-    set "bmargin 3"
-    set "lmargin 5"
-    set "rmargin 2"
+  set $ "output " ++ show (output cfg ++ "." ++ term cfg)
+  set "tmargin 3"
+  set "bmargin 4"
+  set "lmargin 5"
+  set "rmargin 2"
+  set "key at screen 1,0.1 opaque"
   setMaybe "xlabel" (show <$> xlabel cfg)
   setMaybe "ylabel" (show <$> ylabel cfg)
   setMaybe "xrange" (range <$> xrange cfg)

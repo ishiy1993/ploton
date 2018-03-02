@@ -13,7 +13,7 @@ main = do
     let code = genCode cfg
     when (verbose cfg) $ putErr ("Code: " ++ code)
     plot code
-    putStrLn $ output cfg
+    putStrLn $ output cfg ++ "." ++ term cfg
 
 putErr :: String -> IO ()
 putErr = hPutStrLn stderr

@@ -22,7 +22,7 @@ spec = do
             let cfg = Config { script = "#1 u 1:2"
                              , dataFiles = ["sample.dat"]
                              , term = "pdf"
-                             , output = "plot_result.pdf"
+                             , output = "plot_result"
                              , setting = []
                              , xlabel = Nothing
                              , ylabel = Nothing
@@ -42,6 +42,11 @@ spec = do
                              }
                 res = concat ["set term pdf;"
                              ,"set output \"plot_result.pdf\";"
+                             ,"set tmargin 3;"
+                             ,"set bmargin 4;"
+                             ,"set lmargin 5;"
+                             ,"set rmargin 2;"
+                             ,"set key at screen 1,0.1 opaque;"
                              ,"set style data linespoints;"
                              ,"plot \"sample.dat\" u 1:2;"]
             genCode cfg `shouldBe` res
@@ -49,7 +54,7 @@ spec = do
             let cfg = Config { script = "#1 u 1:2, #1 u 1:4, #2 u 1:2"
                              , dataFiles = ["sample1.dat", "sample2.dat"]
                              , term = "pdf"
-                             , output = "plot_result.pdf"
+                             , output = "plot_result"
                              , setting = []
                              , xlabel = Just "x"
                              , ylabel = Just "x^2"
@@ -69,6 +74,11 @@ spec = do
                              }
                 res = concat ["set term pdf;"
                              ,"set output \"plot_result.pdf\";"
+                             ,"set tmargin 3;"
+                             ,"set bmargin 4;"
+                             ,"set lmargin 5;"
+                             ,"set rmargin 2;"
+                             ,"set key at screen 1,0.1 opaque;"
                              ,"set xlabel \"x\";"
                              ,"set ylabel \"x^2\";"
                              ,"set xrange [1:10];"
@@ -85,7 +95,7 @@ spec = do
             let cfg = Config { script = "#1 with pm3d"
                              , dataFiles = ["sample.dat"]
                              , term = "pdf"
-                             , output = "plot_result.pdf"
+                             , output = "plot_result"
                              , setting = []
                              , xlabel = Nothing
                              , ylabel = Nothing
@@ -105,6 +115,11 @@ spec = do
                              }
                 res = concat ["set term pdf;"
                              ,"set output \"plot_result.pdf\";"
+                             ,"set tmargin 3;"
+                             ,"set bmargin 4;"
+                             ,"set lmargin 5;"
+                             ,"set rmargin 2;"
+                             ,"set key at screen 1,0.1 opaque;"
                              ,"set style data linespoints;"
                              ,"set pm3d map;"
                              ,"set palette ;"
@@ -114,7 +129,7 @@ spec = do
             let cfg = Config { script = "#1 u 1:2;#1 u 1:3"
                              , dataFiles = ["sample.dat"]
                              , term = "pdf"
-                             , output = "plot_result.pdf"
+                             , output = "plot_result"
                              , setting = []
                              , xlabel = Nothing
                              , ylabel = Nothing
@@ -135,9 +150,10 @@ spec = do
                 res = concat ["set term pdf size 8in,3in;"
                              ,"set output \"plot_result.pdf\";"
                              ,"set tmargin 3;"
-                             ,"set bmargin 3;"
+                             ,"set bmargin 4;"
                              ,"set lmargin 5;"
                              ,"set rmargin 2;"
+                             ,"set key at screen 1,0.1 opaque;"
                              ,"set style data linespoints;"
                              ,"set multiplot layout 1,2;"
                              ,"plot \"sample.dat\" u 1:2;"
@@ -148,7 +164,7 @@ spec = do
             let cfg = Config { script = "#1 u 1:2:3;#1 u 1:2:4;#2 u 1:2:3"
                              , dataFiles = ["sample1.dat", "sample2.dat"]
                              , term = "pdf"
-                             , output = "plot_result.pdf"
+                             , output = "plot_result"
                              , setting = []
                              , xlabel = Nothing
                              , ylabel = Nothing
@@ -169,9 +185,10 @@ spec = do
                 res = concat ["set term pdf size 12in,3in;"
                              ,"set output \"plot_result.pdf\";"
                              ,"set tmargin 3;"
-                             ,"set bmargin 3;"
+                             ,"set bmargin 4;"
                              ,"set lmargin 5;"
                              ,"set rmargin 2;"
+                             ,"set key at screen 1,0.1 opaque;"
                              ,"set style data linespoints;"
                              ,"set pm3d map;"
                              ,"set palette ;"

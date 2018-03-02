@@ -55,7 +55,7 @@ optsParser = info (versionInfo <*> helper <*> programOptions)
                                  )
                    <*> strOption (metavar "OUTPUT"
                                  <> long "output"
-                                 <> value "plot_result.pdf"
+                                 <> value "plot_result"
                                  <> help "output file name"
                                  )
                    <*> many (strOption (metavar "set ..."

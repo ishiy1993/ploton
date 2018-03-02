@@ -23,7 +23,7 @@ plot_result.pdf
 See [sample.dat](./sample.dat) and [plot\_result.pdf](./plot_result.pdf).
 
 ```
-$ ploton "#1" --style "pm3d" -3 --output "sample-3d.pdf" "sample-3d.dat"
+$ ploton "#1" --style "pm3d" -3 --output "sample-3d" "sample-3d.dat"
 sample-3d.pdf
 ```
 

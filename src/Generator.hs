@@ -12,7 +12,7 @@ import Utils
 
 genCode :: Config -> String
 genCode cfg = execWriter $ do
-  case calcSize <$> multi cfg of
+  case calcSize (term cfg) <$> multi cfg of
     Nothing -> set $ "term " ++ term cfg
     Just s -> set $ "term " ++ term cfg ++ " size " ++ s
   set $ "output " ++ show (output cfg ++ "." ++ term cfg)
@@ -43,9 +43,13 @@ genCode cfg = execWriter $ do
       set $ "title " ++ show t
       tell' b
 
-calcSize :: String -> String
-calcSize xy = show (4*read @Int y) ++ "in," ++ show (3*read @Int x) ++ "in"
-  where (x,y) = drop 1 <$> break (==',') xy
+calcSize :: String -> String -> String
+calcSize term xy | term == "png" = show (unit*y) ++ "," ++ show (unit*x)
+                 | otherwise = show (4*y) ++ "in," ++ show (3*x) ++ "in"
+  where (x',y') = drop 1 <$> break (==',') xy
+        x = read @Int x'
+        y = read @Int y'
+        unit = 512
 
 range :: String -> String
 range s | null s || head s == '[' && last s == ']' = s

@@ -3,7 +3,7 @@ module Generator where
 
 import Control.Monad
 import Control.Monad.Trans.Writer
-import Data.List (foldl')
+import Data.List (foldl', isPrefixOf)
 import Data.List.Split (splitOn)
 import Data.Maybe (isJust)
 
@@ -44,12 +44,14 @@ genCode cfg = execWriter $ do
       tell' b
 
 calcSize :: String -> String -> String
-calcSize term xy | term == "png" = show (unit*y) ++ "," ++ show (unit*x)
-                 | otherwise = show (4*y) ++ "in," ++ show (3*x) ++ "in"
+calcSize term xy | "png" `isPrefixOf` term = show (pngUnit*y) ++ "," ++ show (pngUnit*x)
+                 | "pdf" `isPrefixOf` term = show (4*y) ++ "in," ++ show (3*x) ++ "in"
+                 | otherwise = show (svgUnit*y) ++ "," ++ show (svgUnit*x)
   where (x',y') = drop 1 <$> break (==',') xy
         x = read @Int x'
         y = read @Int y'
-        unit = 512
+        pngUnit = 512
+        svgUnit = 350
 
 range :: String -> String
 range s | null s || head s == '[' && last s == ']' = s

@@ -1,28 +1,26 @@
 {-# LANGUAGE TypeApplications #-}
 module Generator where
 
-import Control.Monad
-import Control.Monad.Trans.Writer
-import Data.List (foldl', isPrefixOf)
-import Data.List.Split (splitOn)
-import Data.Maybe (isJust)
+import           Control.Monad
+import           Control.Monad.Trans.Writer
+import           Data.List                  (foldl', isPrefixOf, zip4)
+import           Data.List.Split            (splitOn)
+import           Data.Maybe                 (isJust)
 
-import Config
-import Utils
+import           Config
+import           Utils
 
 genCode :: Config -> String
 genCode cfg = execWriter $ do
   case calcSize (term cfg) <$> multi cfg of
     Nothing -> set $ "term " ++ term cfg
-    Just s -> set $ "term " ++ term cfg ++ " size " ++ s
+    Just s  -> set $ "term " ++ term cfg ++ " size " ++ s
   set $ "output " ++ show (output cfg ++ "." ++ term cfg)
   set "tmargin 3"
   set "bmargin 4"
   set "lmargin 5"
   set "rmargin 2"
   set "key at screen 1,0.1 opaque"
-  setMaybe "xlabel" (show <$> xlabel cfg)
-  setMaybe "ylabel" (show <$> ylabel cfg)
   setMaybe "xrange" (range <$> xrange cfg)
   setMaybe "yrange" (range <$> yrange cfg)
   setMaybe "format x" (show <$> xformat cfg)
@@ -37,11 +35,14 @@ genCode cfg = execWriter $ do
   let withTitle = maybe id (\t -> (++ (" title " ++ show t))) (multiTitle cfg)
   setMaybe "multiplot layout" (withTitle <$> multi cfg)
   let body = makeScripts (splot cfg) (script cfg) (dataFiles cfg)
-  case splitOn ";" <$> title cfg of
-    Nothing -> mapM_ tell' body
-    Just ts -> forM_ (zip ts body) $ \(t, b) -> do
-      set $ "title " ++ show t
-      tell' b
+      ts = split $ title cfg
+      xl = split $ xlabel cfg
+      yl = split $ ylabel cfg
+  forM_ (zip4 ts xl yl body) $ \(t, x, y, b) -> do
+    setMaybe "title" (show <$> t)
+    setMaybe "xlabel" (show <$> x)
+    setMaybe "ylabel" (show <$> y)
+    tell' b
 
 calcSize :: String -> String -> String
 calcSize term xy | "png" `isPrefixOf` term = show (pngUnit*y) ++ "," ++ show (pngUnit*x)
@@ -77,8 +78,12 @@ set :: String -> Writer String ()
 set code = tell $ "set " ++ code ++ ";"
 
 setMaybe :: String -> Maybe String -> Writer String ()
-setMaybe attr Nothing = return ()
+setMaybe attr Nothing  = return ()
 setMaybe attr (Just s) = set $ attr ++ " " ++ s
 
 tell' :: String -> Writer String ()
 tell' str = tell $ str ++ ";"
+
+split :: Maybe String -> [Maybe String]
+split Nothing   = repeat Nothing
+split (Just xs) = [Just x | x <- splitOn ";" xs] ++ repeat Nothing

@@ -1,10 +1,10 @@
 module SrcSpec (main, spec) where
 
-import Test.Hspec
+import           Test.Hspec
 
-import Config
-import Generator (genCode)
-import Utils
+import           Config
+import           Generator  (genCode)
+import           Utils
 
 main :: IO ()
 main = hspec spec
@@ -79,8 +79,6 @@ spec = do
                              ,"set lmargin 5;"
                              ,"set rmargin 2;"
                              ,"set key at screen 1,0.1 opaque;"
-                             ,"set xlabel \"x\";"
-                             ,"set ylabel \"x^2\";"
                              ,"set xrange [1:10];"
                              ,"set yrange [10:100];"
                              ,"set format x \"%E\";"
@@ -89,6 +87,8 @@ spec = do
                              ,"set logscale x;"
                              ,"set logscale y;"
                              ,"set title \"sample\";"
+                             ,"set xlabel \"x\";"
+                             ,"set ylabel \"x^2\";"
                              ,"plot \"sample1.dat\" u 1:2, \"sample1.dat\" u 1:4, \"sample2.dat\" u 1:2;"]
             genCode cfg `shouldBe` res
         it "3d simple version" $ do
@@ -166,8 +166,8 @@ spec = do
                              , term = "pdf"
                              , output = "plot_result"
                              , setting = []
-                             , xlabel = Nothing
-                             , ylabel = Nothing
+                             , xlabel = Just "x"
+                             , ylabel = Just "{/Symbol r};u;v"
                              , xrange = Nothing
                              , yrange = Nothing
                              , xformat = Nothing
@@ -194,10 +194,14 @@ spec = do
                              ,"set palette ;"
                              ,"set multiplot layout 1,3 title \"sample\";"
                              ,"set title \"r\";"
+                             ,"set xlabel \"x\";"
+                             ,"set ylabel \"{/Symbol r}\";"
                              ,"splot \"sample1.dat\" u 1:2:3;"
                              ,"set title \"u\";"
+                             ,"set ylabel \"u\";"
                              ,"splot \"sample1.dat\" u 1:2:4;"
                              ,"set title \"v\";"
+                             ,"set ylabel \"v\";"
                              ,"splot \"sample2.dat\" u 1:2:3;"
                              ]
             genCode cfg `shouldBe` res

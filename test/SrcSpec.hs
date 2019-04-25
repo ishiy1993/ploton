@@ -167,7 +167,7 @@ spec = do
                              , output = "plot_result"
                              , setting = []
                              , xlabel = Just "x"
-                             , ylabel = Just "{/Symbol r};u;v"
+                             , ylabel = Just "{/Symbol \r};u;v"
                              , xrange = Nothing
                              , yrange = Nothing
                              , xformat = Nothing
@@ -195,7 +195,7 @@ spec = do
                              ,"set multiplot layout 1,3 title \"sample\";"
                              ,"set title \"r\";"
                              ,"set xlabel \"x\";"
-                             ,"set ylabel \"{/Symbol r}\";"
+                             ,"set ylabel \"{/Symbol \\r}\";"
                              ,"splot \"sample1.dat\" u 1:2:3;"
                              ,"set title \"u\";"
                              ,"set ylabel \"u\";"

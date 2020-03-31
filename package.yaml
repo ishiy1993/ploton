@@ -1,5 +1,5 @@
 name: ploton
-version: '1.1.4.0'
+version: '1.2.0.0'
 synopsis: A useful cli tool to draw figures
 description: Please see README.md
 category: CLI
@@ -25,9 +25,7 @@ executables:
     main: Main.hs
     source-dirs: app
     ghc-options:
-    - -threaded
     - -rtsopts
-    - -with-rtsopts=-N
     dependencies:
     - base
     - ploton

@@ -15,7 +15,7 @@ genCode cfg = execWriter $ do
   case calcSize (term cfg) <$> multi cfg of
     Nothing -> set $ "term " ++ term cfg
     Just s  -> set $ "term " ++ term cfg ++ " size " ++ s
-  set $ "output " ++ show (output cfg ++ "." ++ term cfg)
+  set $ "output " ++ dquote (output cfg ++ "." ++ term cfg)
   set "tmargin 3"
   set "bmargin 4"
   set "lmargin 5"
@@ -23,8 +23,8 @@ genCode cfg = execWriter $ do
   set "key at screen 1,0.1 opaque"
   setMaybe "xrange" (range <$> xrange cfg)
   setMaybe "yrange" (range <$> yrange cfg)
-  setMaybe "format x" (show <$> xformat cfg)
-  setMaybe "format y" (show <$> yformat cfg)
+  setMaybe "format x" (dquote <$> xformat cfg)
+  setMaybe "format y" (dquote <$> yformat cfg)
   set $ "style data " ++ style cfg
   when (logx cfg) $ set "logscale x"
   when (logy cfg) $ set "logscale y"
@@ -32,16 +32,16 @@ genCode cfg = execWriter $ do
     set "pm3d map"
     set $ "palette " ++ colorToCode (color cfg)
   mapM_ set $ setting cfg
-  let withTitle = maybe id (\t -> (++ (" title " ++ show t))) (multiTitle cfg)
+  let withTitle = maybe id (\t -> (++ (" title " ++ dquote t))) (multiTitle cfg)
   setMaybe "multiplot layout" (withTitle <$> multi cfg)
   let body = makeScripts (splot cfg) (script cfg) (dataFiles cfg)
       ts = split $ title cfg
       xl = split $ xlabel cfg
       yl = split $ ylabel cfg
   forM_ (zip4 ts xl yl body) $ \(t, x, y, b) -> do
-    setMaybe "title" (show <$> t)
-    setMaybe "xlabel" (show <$> x)
-    setMaybe "ylabel" (show <$> y)
+    setMaybe "title" (dquote <$> t)
+    setMaybe "xlabel" (dquote <$> x)
+    setMaybe "ylabel" (dquote <$> y)
     tell' b
 
 calcSize :: String -> String -> String
@@ -72,7 +72,7 @@ makeScripts b s fs = map build $ splitOn ";" $ replaceFilename s fs
 
 replaceFilename :: String -> [String] -> String
 replaceFilename script files = snd $ foldl' build (1, script) $ files
-  where build (i, scr) file = (i+1, replace i (show file) scr)
+  where build (i, scr) file = (i+1, replace i (dquote file) scr)
 
 set :: String -> Writer String ()
 set code = tell $ "set " ++ code ++ ";"
@@ -87,3 +87,6 @@ tell' str = tell $ str ++ ";"
 split :: Maybe String -> [Maybe String]
 split Nothing   = repeat Nothing
 split (Just xs) = [Just x | x <- splitOn ";" xs] ++ repeat Nothing
+
+dquote :: String -> String
+dquote s = "\"" ++ s ++ "\""

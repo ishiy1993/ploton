@@ -1,0 +1,19 @@
+cradle:
+  stack:
+    - path: "./test/Spec.hs"
+      component: "ploton:test:spec"
+
+    - path: "./test/SrcSpec.hs"
+      component: "ploton:test:spec"
+
+    - path: "./app/Main.hs"
+      component: "ploton:exe:ploton"
+
+    - path: "./src/Config.hs"
+      component: "ploton:lib"
+
+    - path: "./src/Generator.hs"
+      component: "ploton:lib"
+
+    - path: "./src/Utils.hs"
+      component: "ploton:lib"

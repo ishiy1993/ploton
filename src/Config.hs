@@ -3,7 +3,25 @@ module Config where
 import Data.Monoid ((<>))
 import Data.List (intercalate, foldl')
 import Data.Version (showVersion)
-import Options.Applicative hiding (style)
+import Options.Applicative
+    ( Alternative(many, some),
+      ParserInfo,
+      helper,
+      ParseError(InfoMsg),
+      abortOption,
+      fullDesc,
+      header,
+      help,
+      hidden,
+      info,
+      long,
+      metavar,
+      short,
+      strArgument,
+      strOption,
+      switch,
+      value,
+      execParser )
 
 import Utils
 

@@ -71,7 +71,7 @@ makeScripts b s fs = map build $ splitOn ";" $ replaceFilename s fs
   where build = if b then ("splot " ++) else ("plot " ++)
 
 replaceFilename :: String -> [String] -> String
-replaceFilename script files = snd $ foldl' build (1, script) $ files
+replaceFilename script files = snd $ foldl' build (1, script) files
   where build (i, scr) file = (i+1, replace i (dquote file) scr)
 
 set :: String -> Writer String ()

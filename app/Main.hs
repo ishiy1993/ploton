@@ -1,11 +1,12 @@
 module Main where
 
 import Control.Monad (when)
-import System.IO
+import System.IO ( hPutStrLn, stderr )
 
-import Config
-import Generator
-import Utils
+import Config ( getConfig, Config(verbose, output, term) )
+import Generator ( genCode )
+import Utils ( plot )
+
 
 main :: IO ()
 main = do
